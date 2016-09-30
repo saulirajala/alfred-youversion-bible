@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>irajala.bible.fi</string>
+	<key>category</key>
+	<string>Internet</string>
+	<key>connections</key>
+	<dict>
+		<key>79396A58-6CBD-47DB-A270-41AF2A4FA0E1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A7BD62C1-8AC9-4B82-90FC-C04A30ECC8DE</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>5CDA29FF-D0ED-4490-BC41-5DFD09B1B921</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>8019A0CE-37EA-4252-A80F-8630B71F9C20</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Sauli Rajala</string>
+	<key>description</key>
+	<string>Copy&amp;paste bible verses from Youversion</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Youversion bible</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>A7BD62C1-8AC9-4B82-90FC-C04A30ECC8DE</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>yve</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>1</integer>
+				<key>queuemode</key>
+				<integer>2</integer>
+				<key>runningsubtext</key>
+				<string>Searching the verse(s)…</string>
+				<key>script</key>
+				<string>require_once('workflows.php');
+require_once('dom.php');
+require_once('functions.php');
+
+$query = trim("{query}");
+
+$empty_space = strpos($query, '.')+1;
+if (intval($empty_space) &lt;= 2 ){
+  $substring = substr($query, $empty_space);
+  $empty_space = strpos($substring, '.')+1+2;
+}
+
+$book = substr($query, 0, $empty_space);
+$chapter = trim(substr($query, $empty_space, strpos($query, ':')-$empty_space));
+$verse = trim(substr($query, strpos($query, ':')+1));
+
+$all_books = map_fi_books_abbreviation_to_youversion();
+
+$w = new Workflows();
+
+$url_new = 'https://www.bible.com/fi/bible/330/'.$all_books[$book].'.'.$chapter.'.'.$verse;
+$url_old = 'https://www.bible.com/fi/bible/365/'.$all_books[$book].'.'.$chapter.'.'.$verse;
+
+
+$verse_text = get_verse_text($url_new, $w);
+if($verse_text !== ''){
+  $w-&gt;result($query, trim($verse_text), $verse_text, $query.' 1992', 'icon.png', 'yes', 'autocomplete');
+}
+
+$verse_text = get_verse_text($url_old, $w);
+if($verse_text !== ''){
+  $w-&gt;result($query, trim($verse_text), $verse_text, $query.' 1933/38', 'icon.png', 'yes', 'autocomplete');
+}
+echo $w-&gt;toxml();</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Bible verses</string>
+				<key>title</key>
+				<string>Type a passage in the Bible</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>79396A58-6CBD-47DB-A270-41AF2A4FA0E1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>Bible verse was copied to clipboad</string>
+				<key>title</key>
+				<string>Bible verse</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>5CDA29FF-D0ED-4490-BC41-5DFD09B1B921</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>largetypetext</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.largetype</string>
+			<key>uid</key>
+			<string>8019A0CE-37EA-4252-A80F-8630B71F9C20</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>5CDA29FF-D0ED-4490-BC41-5DFD09B1B921</key>
+		<dict>
+			<key>xpos</key>
+			<integer>640</integer>
+			<key>ypos</key>
+			<integer>120</integer>
+		</dict>
+		<key>79396A58-6CBD-47DB-A270-41AF2A4FA0E1</key>
+		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
+			<key>ypos</key>
+			<real>90</real>
+		</dict>
+		<key>8019A0CE-37EA-4252-A80F-8630B71F9C20</key>
+		<dict>
+			<key>xpos</key>
+			<integer>640</integer>
+			<key>ypos</key>
+			<integer>250</integer>
+		</dict>
+		<key>A7BD62C1-8AC9-4B82-90FC-C04A30ECC8DE</key>
+		<dict>
+			<key>xpos</key>
+			<integer>640</integer>
+			<key>ypos</key>
+			<integer>10</integer>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>www.irajala.com</string>
+</dict>
+</plist>
