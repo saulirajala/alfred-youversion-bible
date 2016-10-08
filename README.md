@@ -35,9 +35,10 @@ After you have installed the workflow, open the workflow in Finder. There is a f
 Step 2. is not required, if `map_yourlanguage_books_abbreviation_to_youversion()`-function already exists. You can also add more versions to existing languages by adding more urls to `get_urls()`-function. Bear in mind though: The more versions, the slower workflow.
 
 ##Abbreviation mapping
-Because YouVersion use different abbreviation than normally in English (and certainly in Finnish), I made a function that automatically maps common English/Finnish abbreviation with the ones used by YouVersion. Here are the complete list of abbreviations
+Because YouVersion use different abbreviation than is common in English (and definitely in Finnish), I made a function that automatically maps common English/Finnish abbreviation with the ones used by YouVersion. Here are the complete list of abbreviations:
 
 ###Abbreviation in English
+```
    'Gen.' => 'gen',
    'Ex.' => 'exo',
    'Lev.' => 'lev',
@@ -104,8 +105,10 @@ Because YouVersion use different abbreviation than normally in English (and cert
    '3 John' => '3jn',
    'Jude' => 'jud',
    'Rev.' => 'rev'
-   
+```
+
 ###Abbreviations in Finnish
+```
   '1. Moos.' => 'gen',
   '2. Moos.' => 'exo',
   '3. Moos.' => 'lev',
@@ -172,3 +175,4 @@ Because YouVersion use different abbreviation than normally in English (and cert
   '3. Joh.' => '3jn',
   'Juud.' => 'jud',
   'Ilm.' => 'rev'
+```
