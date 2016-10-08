@@ -145,7 +145,7 @@
 				<key>queuedelayimmediatelyinitially</key>
 				<false/>
 				<key>queuedelaymode</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>queuemode</key>
 				<integer>2</integer>
 				<key>runningsubtext</key>
@@ -160,9 +160,9 @@ $query = trim("{query}");
 $empty_space_place = strpos($query, ' ')+1;
 
 // If the book is like 1. Tim. or 2. Kings, etc.
-if (intval($empty_space_place) &lt;= 2 ){
+if (intval($empty_space_place) &lt;= 3 ){
   $substring = substr($query, $empty_space_place);
-  $empty_space_place = strpos($substring, '.')+1+2;
+  $empty_space_place = strpos($substring, ' ')+1+2;
 }
 
 $book = trim(substr($query, 0, $empty_space_place));
