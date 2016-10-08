@@ -2,7 +2,7 @@
 Alfred workflow for copy&amp;paste Bible verses from Youversion. Can be used to search from english (NASB and NIV) or from finnish (1992 and 1933/38) bible versions.
 
 ##How to install workflow?
-Download `youversion-bible.alfredworkflow` from github. Double click the file and Alfred will install it.
+Download [`youversion-bible.alfredworkflow`](https://github.com/saulirajala/alfred-youversion-bible/raw/master/youversion-bible.alfredworkflow) from github. Double click the file and Alfred will install it.
 
 ##How to change the language?
 ```
