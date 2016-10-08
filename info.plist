@@ -4,10 +4,57 @@
 <dict>
 	<key>bundleid</key>
 	<string>irajala.bible.fi</string>
-	<key>category</key>
-	<string>Internet</string>
 	<key>connections</key>
 	<dict>
+		<key>28FDF9F6-6676-4B2B-8329-75F5E7BF8661</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>755ADFC7-16BD-40EE-9DBE-273D5624054E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>58C505A5-56B7-4E99-BA64-6A29A959891A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>28FDF9F6-6676-4B2B-8329-75F5E7BF8661</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>95E2C0F4-BDC8-475D-945A-CD3EC7E8B514</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>755ADFC7-16BD-40EE-9DBE-273D5624054E</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>BB536953-B5D9-42E2-BA30-9F96EC54199D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>79396A58-6CBD-47DB-A270-41AF2A4FA0E1</key>
 		<array>
 			<dict>
@@ -33,6 +80,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>8019A0CE-37EA-4252-A80F-8630B71F9C20</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>95E2C0F4-BDC8-475D-945A-CD3EC7E8B514</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>6D8BF4B9-D0C4-4C9C-AA31-8C975A091ABB</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -97,33 +157,32 @@ require_once('functions.php');
 
 $query = trim("{query}");
 
-$empty_space = strpos($query, '.')+1;
-if (intval($empty_space) &lt;= 2 ){
-  $substring = substr($query, $empty_space);
-  $empty_space = strpos($substring, '.')+1+2;
+$empty_space_place = strpos($query, ' ')+1;
+
+// If the book is like 1. Tim. or 2. Kings, etc.
+if (intval($empty_space_place) &lt;= 2 ){
+  $substring = substr($query, $empty_space_place);
+  $empty_space_place = strpos($substring, '.')+1+2;
 }
 
-$book = substr($query, 0, $empty_space);
-$chapter = trim(substr($query, $empty_space, strpos($query, ':')-$empty_space));
+$book = trim(substr($query, 0, $empty_space_place));
+$chapter = trim(substr($query, $empty_space_place, strpos($query, ':')-$empty_space_place));
 $verse = trim(substr($query, strpos($query, ':')+1));
 
-$all_books = map_fi_books_abbreviation_to_youversion();
+$all_books = call_user_func('map_'.getenv('language').'_books_abbreviation_to_youversion');
 
 $w = new Workflows();
 
-$url_new = 'https://www.bible.com/fi/bible/330/'.$all_books[$book].'.'.$chapter.'.'.$verse;
-$url_old = 'https://www.bible.com/fi/bible/365/'.$all_books[$book].'.'.$chapter.'.'.$verse;
+$urls = get_urls(getenv('language'));
 
-
-$verse_text = get_verse_text($url_new, $w);
-if($verse_text !== ''){
-  $w-&gt;result($query, trim($verse_text), $verse_text, $query.' 1992', 'icon.png', 'yes', 'autocomplete');
+foreach ($urls as $version =&gt; $url) {
+    $url = $url.$all_books[$book].'.'.$chapter.'.'.$verse;
+    $verse_text = get_verse_text($url, $w);
+    if($verse_text !== ''){
+      $w-&gt;result($query, trim($verse_text), $verse_text, $query.' '.$version, 'icon.png', 'yes', 'autocomplete');
+    }
 }
 
-$verse_text = get_verse_text($url_old, $w);
-if($verse_text !== ''){
-  $w-&gt;result($query, trim($verse_text), $verse_text, $query.' 1933/38', 'icon.png', 'yes', 'autocomplete');
-}
 echo $w-&gt;toxml();</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
@@ -179,11 +238,135 @@ echo $w-&gt;toxml();</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>keyword</key>
+				<string>lang</string>
+				<key>subtext</key>
+				<string>See what is the current language by giving no argument</string>
+				<key>text</key>
+				<string>Change the language for Youversion bible</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>58C505A5-56B7-4E99-BA64-6A29A959891A</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{query}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
+				<integer>1</integer>
+				<key>matchstring</key>
+				<string></string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>28FDF9F6-6676-4B2B-8329-75F5E7BF8661</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>/usr/libexec/PlistBuddy -c "Set :variables:language \"{query}\"" info.plist
+
+echo -n {query}</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>755ADFC7-16BD-40EE-9DBE-273D5624054E</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>largetypetext</key>
+				<string>Changed language to {query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.largetype</string>
+			<key>uid</key>
+			<string>BB536953-B5D9-42E2-BA30-9F96EC54199D</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{query}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
+				<integer>0</integer>
+				<key>matchstring</key>
+				<string></string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>95E2C0F4-BDC8-475D-945A-CD3EC7E8B514</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>largetypetext</key>
+				<string>Language is {var:language}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.largetype</string>
+			<key>uid</key>
+			<string>6D8BF4B9-D0C4-4C9C-AA31-8C975A091ABB</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
 	<key>uidata</key>
 	<dict>
+		<key>28FDF9F6-6676-4B2B-8329-75F5E7BF8661</key>
+		<dict>
+			<key>xpos</key>
+			<integer>340</integer>
+			<key>ypos</key>
+			<integer>280</integer>
+		</dict>
+		<key>58C505A5-56B7-4E99-BA64-6A29A959891A</key>
+		<dict>
+			<key>xpos</key>
+			<integer>130</integer>
+			<key>ypos</key>
+			<integer>250</integer>
+		</dict>
 		<key>5CDA29FF-D0ED-4490-BC41-5DFD09B1B921</key>
 		<dict>
 			<key>xpos</key>
@@ -191,19 +374,40 @@ echo $w-&gt;toxml();</string>
 			<key>ypos</key>
 			<integer>120</integer>
 		</dict>
+		<key>6D8BF4B9-D0C4-4C9C-AA31-8C975A091ABB</key>
+		<dict>
+			<key>xpos</key>
+			<integer>660</integer>
+			<key>ypos</key>
+			<integer>510</integer>
+		</dict>
+		<key>755ADFC7-16BD-40EE-9DBE-273D5624054E</key>
+		<dict>
+			<key>xpos</key>
+			<integer>450</integer>
+			<key>ypos</key>
+			<integer>300</integer>
+		</dict>
 		<key>79396A58-6CBD-47DB-A270-41AF2A4FA0E1</key>
 		<dict>
 			<key>xpos</key>
-			<integer>300</integer>
+			<integer>130</integer>
 			<key>ypos</key>
-			<real>90</real>
+			<integer>90</integer>
 		</dict>
 		<key>8019A0CE-37EA-4252-A80F-8630B71F9C20</key>
 		<dict>
 			<key>xpos</key>
 			<integer>640</integer>
 			<key>ypos</key>
-			<integer>250</integer>
+			<integer>240</integer>
+		</dict>
+		<key>95E2C0F4-BDC8-475D-945A-CD3EC7E8B514</key>
+		<dict>
+			<key>xpos</key>
+			<integer>450</integer>
+			<key>ypos</key>
+			<integer>480</integer>
 		</dict>
 		<key>A7BD62C1-8AC9-4B82-90FC-C04A30ECC8DE</key>
 		<dict>
@@ -212,7 +416,21 @@ echo $w-&gt;toxml();</string>
 			<key>ypos</key>
 			<integer>10</integer>
 		</dict>
+		<key>BB536953-B5D9-42E2-BA30-9F96EC54199D</key>
+		<dict>
+			<key>xpos</key>
+			<integer>660</integer>
+			<key>ypos</key>
+			<integer>390</integer>
+		</dict>
 	</dict>
+	<key>variables</key>
+	<dict>
+		<key>language</key>
+		<string>english</string>
+	</dict>
+	<key>version</key>
+	<string></string>
 	<key>webaddress</key>
 	<string>www.irajala.com</string>
 </dict>
