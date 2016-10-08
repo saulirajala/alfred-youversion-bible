@@ -1,10 +1,10 @@
 # alfred-youversion-bible
 Alfred workflow for copy&amp;paste Bible verses from Youversion. Can be used to search from english (NASB and NIV) or from finnish (1992 and 1933/38) bible versions.
 
-#How to install workflow?
+##How to install workflow?
 Download `youversion-bible.alfredworkflow` from github. Double click the file and Alfred will install it.
 
-#How to change the language?
+##How to change the language?
 ```
 lang
 ```
@@ -15,7 +15,7 @@ lang finnish
 ```
 Change the language to finnish
 
-#How to use?
+##How to use?
 ```
 yve Joh. 3:16 
 ```
@@ -26,7 +26,7 @@ yve Joh. 3:16-18
 ```
 Copy&paste John 3:16-18
 
-#How to expand to other language and/or versions?
+##How to expand to other language and/or versions?
 After you have installed the workflow, open the workflow in Finder. There is a file called `functions.php`. All the changes you need to do will be in this file. There are two things you need to do:
 
 1. Add the YouVersion base-urls to function called `get_urls()`
