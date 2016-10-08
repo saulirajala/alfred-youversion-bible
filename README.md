@@ -37,7 +37,7 @@ Step 2. is not required, if `map_yourlanguage_books_abbreviation_to_youversion()
 ##Abbreviation mapping
 Because YouVersion use different abbreviation than is common in English (and definitely in Finnish), I made a function that automatically maps common English/Finnish abbreviation with the ones used by YouVersion. Here are the complete list of abbreviations:
 
-###Abbreviation in English
+###Abbreviations in English
 ```
    'Gen.' => 'gen',
    'Ex.' => 'exo',
