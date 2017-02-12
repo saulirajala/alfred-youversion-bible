@@ -17,12 +17,12 @@ Change the language to finnish
 
 ##How to use?
 ```
-yve Joh. 3:16 
+yve Joh. 3:16
 ```
 Copy&paste John 3:16
 
 ```
-yve Joh. 3:16-18 
+yve Joh. 3:16-18
 ```
 Copy&paste John 3:16-18
 
@@ -80,7 +80,7 @@ Because YouVersion use different abbreviation than is common in English (and def
    'Mal.' => 'mal',
    'Matt.' => 'mat',
    'Mark' => 'mrk',
-   'Luke' => 'lke',
+   'Luke' => 'luk',
    'John' => 'jhn',
    'Acts' => 'act',
    'Rom.' => 'rom',
@@ -150,7 +150,7 @@ Because YouVersion use different abbreviation than is common in English (and def
   'Mal.' => 'mal',
   'Matt.' => 'mat',
   'Mark.' => 'mrk',
-  'Luuk.' => 'lke',
+  'Luuk.' => 'luk',
   'Joh.' => 'jhn',
   'Ap.t.' => 'act',
   'Room.' => 'rom',
